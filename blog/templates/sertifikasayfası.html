@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Sertifikaları</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Navbar */
+        .navbar {
+            background-color: #563535; /* Kahverengi */
+        }
+
+        /* Navbar Brand (Ana Sayfa) */
+        .navbar-brand {
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold; /* Yazı tipi kalınlığı */
+            color: #fff; /* Yazı rengi */
+        }
+
+        /* Navbar Linkleri */
+        .navbar-nav .nav-link {
+            font-family: 'Roboto', sans-serif;
+            color: #fff; /* Link rengi */
+            font-weight: bold; /* Yazı tipi kalınlığı */
+            margin: 0 15px; /* Linkler arası boşluk */
+        }
+
+        /* Aktif olan link */
+        .navbar-nav .nav-item.active .nav-link {
+            color: #ffc107; /* Aktif link rengi */
+        }
+
+        /* Tablo stilleri */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 10px; /* Sol kenarlık azaltıldı */
+            text-align: left;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        th {
+            background-color: #563535;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #fbfbfb;
+        }
+
+        a.btn {
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #007bff;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+        }
+
+        /* Belge bağlantılarındaki metni küçültme */
+        .belge-link {
+            font-size: 12px;
+        }
+
+        /* Beğeni simgesi rengi */
+        .liked .like-icon {
+            color: red;
+        }
+
+        /* Yorum alanı */
+        .comment-area {
+            display: none;
+            margin-top: 10px;
+        }
+
+        /* Yorum simgesi */
+        .comment-icon {
+            position: relative;
+            cursor: pointer; /* Konuşma balonuna tıklanabilir olmasını sağlar */
+        }
+
+        .comment-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark mb-4">
+    <a class="navbar-brand" href="/">FarukByk</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/about">Hakkımda</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/articles/sertifikasayfası">Sertifikalar</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Kullanıcı Sertifikaları</h1>
+
+    {% if sertifikalar %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Sertifika Adı</th>
+            <th scope="col">Belge</th>
+            <th scope="col">Oluşturulma Tarihi</th>
+            <th scope="col">Beğeni</th>
+            <th scope="col">Yorum</th>
+            <th scope="col">Güncelle</th>
+            <th scope="col">Sil</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sertifika in sertifikalar %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ sertifika.sertifika_adi }}</td>
+            <td><a href="https://docs.google.com/viewer?url={{ sertifika.belge.url }}" target="_blank" class="belge-link">{{ sertifika.belge.name }}</a></td>
+            <td>{{ sertifika.created_date }}</td>
+            <td><button class="btn btn-like" onclick="like(this)"><i class="fas fa-heart like-icon"></i></button></td>
+            <td>
+                <i class="far fa-comment comment-icon" onclick="toggleComment(this)"></i>
+                <span class="comment-count">0</span>
+                <div class="comment-area">
+                    <textarea class="form-control" rows="3" placeholder="Yorum yap"></textarea>
+                    <button class="btn btn-primary mt-2">Yorum Yap</button>
+                </div>
+            </td>
+            <td><a href="{% url 'article:update' sertifika.id %}" class="btn btn-update">Güncelle</a></td>
+            <td><a href="{% url 'article:delete' sertifika.id %}" class="btn btn-delete">Sil</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+    <div class="alert alert-danger">
+        Henüz Bir Makaleniz Bulunmuyor
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Bu kısım, Bootstrap ve jQuery kütüphanelerini ekler (isteğe bağlı) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function like(btn) {
+        btn.classList.toggle('liked');
+    }
+
+    function toggleComment(icon) {
+        const commentArea = icon.parentElement.querySelector('.comment-area');
+        const commentCount = icon.parentElement.querySelector('.comment-count');
+        const commentInput = commentArea.querySelector('textarea');
+        const commentButton = commentArea.querySelector('button');
+
+        commentArea.classList.toggle('show');
+
+        if (commentArea.classList.contains('show')) {
+            commentInput.focus();
+        }
+
+        commentButton.onclick = function () {
+            const commentText = commentInput.value.trim();
+            if (commentText !== '') {
+                commentCount.textContent = parseInt(commentCount.textContent) + 1;
+                commentInput.value = '';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

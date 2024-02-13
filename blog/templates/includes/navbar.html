@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Navbar */
+        .navbar {
+            background-color: #563535; /* Kahverengi */
+        }
+
+        /* Navbar Brand (Ana Sayfa) */
+        .navbar-brand {
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold; /* İsteğe bağlı: Yazı tipi kalınlığını belirtmek için */
+        }
+
+        /* Navbar Linkleri */
+        .navbar-nav .nav-link {
+            font-family: 'Roboto', sans-serif;
+            color: #fff; /* Link rengi */
+            font-weight: bold; /* Yazı tipi kalınlığı */
+            margin: 0 10px; /* Linkler arası boşluk */
+        }
+
+        /* Aktif olan link */
+        .navbar-nav .nav-item.active .nav-link {
+            color: #ffc107; /* Aktif link rengi */
+        }
+    </style>
+    
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark mb-4">
+    <a class="navbar-brand" href="/">FarukByk</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item {% if request.path == '/about' %}active{% endif %}">
+                <a class="nav-link" href="/about">Hakkımda</a>
+            </li>
+            <li class="nav-item {% if request.path == 'articles/sertifakalar' %}active{% endif %}">
+                <a class="nav-link" href="articles/sertifikasayfası">Sertifikalar</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto"> <!-- Sağ tarafa yerleştirilen linkler -->
+        {% if request.user.is_authenticated  %}
+        
+            <li class="nav-item {% if request.path == '/articles/kontrolpaneli' %}active{% endif %}">
+            <a class="nav-link" href="/articles/kontrolpaneli">Kontrol Paneli</a>
+            </li>
+
+            
+            <li class="nav-item {% if request.path == '/user/cikis' %}active{% endif %}">
+            <a class="nav-link" href="/user/Çıkış">Çıkış</a>
+            </li>
+
+        {% else %}
+
+            <li class="nav-item {% if request.path == '/user/giris' %}active{% endif %}">
+            <a class="nav-link" href="/user/Giriş">Giriş Yap</a>
+            </li>
+            
+        {% endif %}
+            <li class="nav-item {% if request.path == '/user/kayit' %}active{% endif %}">
+            <a class="nav-link" href="/user/Kayıt">Kayıt Ol</a>
+            </li>
+             
+        </ul>
+    </div>
+</nav>
+
+<!-- Bu kısım, Bootstrap ve jQuery kütüphanelerini ekler (isteğe bağlı) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
